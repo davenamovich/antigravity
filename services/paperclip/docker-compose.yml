@@ -1,0 +1,37 @@
+version: "3.8"
+
+# ── Paperclip — Agent Orchestration OS ────────────────────────
+
+services:
+  paperclip:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: paperclip
+    restart: always
+    ports:
+      - "3100:3100"
+    environment:
+      NODE_ENV: production
+      PORT: 3100
+      DATABASE_URL: "${PAPERCLIP_DATABASE_URL}"
+      JWT_SECRET: "${PAPERCLIP_JWT_SECRET}"
+      # Vessel Protocol company config
+      COMPANY_NAME: "Vessel Protocol"
+      COMPANY_MISSION: "Automate affiliate content and on-chain revenue distribution via AI agents"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: paperclip_db
+    restart: always
+    environment:
+      POSTGRES_USER: paperclip
+      POSTGRES_PASSWORD: "${PAPERCLIP_DB_PASSWORD:-paperclip_local}"
+      POSTGRES_DB: paperclip
+    volumes:
+      - paperclip_db:/var/lib/postgresql/data
+
+volumes:
+  paperclip_db:

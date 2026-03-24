@@ -1,0 +1,41 @@
+version: "3.8"
+
+# ── Moltis — Rust AI gateway ───────────────────────────────────
+# Railway deploy: use Dockerfile in this directory.
+# Local dev: docker-compose up
+
+services:
+  moltis:
+    image: ghcr.io/moltis-org/moltis:latest
+    container_name: moltis
+    restart: always
+    ports:
+      - "13131:13131"   # Web UI + API
+      - "13132:13132"   # WebSocket
+    environment:
+      # ── LLM Providers ────────────────────────────────────────
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY}"
+
+      # ── Chutes via OpenAI-compat (set as custom OpenAI endpoint)
+      OPENAI_API_KEY: "${CHUTES_API_KEY}"
+      OPENAI_BASE_URL: "${CHUTES_BASE_URL:-https://llm.chutes.ai/v1}"
+
+      # ── Auth ─────────────────────────────────────────────────
+      # On first run, setup code prints to terminal — enter in web UI
+
+    volumes:
+      - moltis_config:/home/moltis/.config/moltis
+      - moltis_data:/home/moltis/.moltis
+      # Note: Docker socket NOT passed — Railway doesn't support it
+      # Sandboxed tool execution disabled in Railway deploy
+      # For full sandbox support, run Moltis on a VPS instead
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:13131/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  moltis_config:
+  moltis_data:

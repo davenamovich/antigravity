@@ -1,0 +1,24 @@
+{
+  "name": "@antigravity/slideshow",
+  "version": "1.0.0",
+  "description": "Vessel Protocol agent slideshow generator",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "test": "ts-node src/test.ts"
+  },
+  "dependencies": {
+    "@antigravity/chutes-client": "workspace:*",
+    "@antigravity/postiz-client": "workspace:*",
+    "openai": "^4.47.0",
+    "puppeteer-core": "^22.0.0",
+    "fastify": "^4.26.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0",
+    "ts-node": "^10.9.2"
+  }
+}
