@@ -1,22 +1,17 @@
-# Dependencies
-node_modules/
-dist/
-build/
-
-# Environment Variables
+node_modules
+.turbo
+dist
+.next
 .env
-.env.*
-
-# Logs
+.env.local
+.env*.local
 *.log
-npm-debug.log*
-
-# Git
-.git/
-
-# OS Files
+output/
 .DS_Store
-Thumbs.db
 
 # Railway
 .railway/
+
+# Secrets
+*.pem
+*.key

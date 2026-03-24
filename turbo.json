@@ -1,0 +1,27 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "CHUTES_API_KEY",
+    "CHUTES_BASE_URL",
+    "DATABASE_URL",
+    "REDIS_URL",
+    "POSTIZ_API_KEY",
+    "POSTIZ_API_URL",
+    "ANTHROPIC_API_KEY",
+    "NODE_ENV"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {},
+    "typecheck": {
+      "dependsOn": ["^build"]
+    }
+  }
+}
