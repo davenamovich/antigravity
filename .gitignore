@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+dist/
+build/
+
+# Environment Variables
+.env
+.env.*
+
+# Logs
+*.log
+npm-debug.log*
+
+# Git
+.git/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Railway
+.railway/
