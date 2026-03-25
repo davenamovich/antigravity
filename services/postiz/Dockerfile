@@ -1,12 +1,13 @@
 # Use a Debian-based base for better binary compatibility with Moltis
 FROM node:20-bookworm-slim
 
-# Install dependencies for Moltis and Postiz
+# Install dependencies for Moltis and Postiz (libgomp1 is required by Moltis)
 RUN apt-get update && apt-get install -y \
     curl \
     bash \
     openssl \
     sudo \
+    libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Moltis using the provided command
