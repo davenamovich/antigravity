@@ -1,6 +1,6 @@
 # Stage 1: Build Moltis from source on Alpine
 FROM rust:alpine AS builder
-RUN apk add --no-cache git musl-dev gcc pkgconfig openssl-dev
+RUN apk add --no-cache git musl-dev gcc pkgconfig openssl-dev perl make
 RUN cargo install moltis --git https://github.com/moltis-org/moltis
 
 # Stage 2: Final Stacked Image
