@@ -1,20 +1,21 @@
-# Stage 1: Build Moltis from source on Alpine
-FROM rust:alpine AS builder
-RUN apk add --no-cache git musl-dev gcc pkgconfig openssl-dev perl make
-RUN rustup default nightly
-RUN cargo install moltis --git https://github.com/moltis-org/moltis
+# Use a Debian-based base for better binary compatibility with Moltis
+FROM node:20-bookworm-slim
 
-# Stage 2: Final Stacked Image
-FROM ghcr.io/gitroomhq/postiz-app:v2.11.3
+# Install dependencies for Moltis and Postiz
+RUN apt-get update && apt-get install -y \
+    curl \
+    bash \
+    openssl \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy Moltis binary from builder
-COPY --from=builder /usr/local/cargo/bin/moltis /usr/local/bin/moltis
+# Install Moltis using the provided command
+RUN curl -fsSL https://www.moltis.org/install.sh | sh
 
-# Ensure bash and curl are available
-USER root
-RUN apk add --no-cache bash curl
+# Copy the pre-built Postiz app from the official image
+COPY --from=ghcr.io/gitroomhq/postiz-app:v2.11.3 /app /app
+WORKDIR /app
 
-# Add start script
+# Add the combined start script
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
