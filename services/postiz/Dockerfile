@@ -1,8 +1,8 @@
 FROM ghcr.io/gitroomhq/postiz-app:v2.11.3
 
-# Install curl for the Moltis installer
+# Install dependencies for the Moltis installer (Alpine)
 USER root
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache curl bash
 
 # Install Moltis using the provided command
 RUN curl -fsSL https://www.moltis.org/install.sh | sh
@@ -11,7 +11,8 @@ RUN curl -fsSL https://www.moltis.org/install.sh | sh
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
-# Moltis port
+# Moltis ports
 EXPOSE 13131
+EXPOSE 1455
 
 CMD ["/start.sh"]
