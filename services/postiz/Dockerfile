@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     bash \
     openssl \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Moltis using the provided command
