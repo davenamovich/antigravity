@@ -22,6 +22,12 @@ RUN curl -fsSL https://www.moltis.org/install.sh | sh
 COPY --from=ghcr.io/gitroomhq/postiz-app:v2.11.3 /app /app
 WORKDIR /app
 
+# Re-generate Prisma client for Debian runtime (fixes Query Engine mismatch)
+# We try multiple common schema paths used in Postiz
+RUN npx prisma generate --schema=apps/backend/prisma/schema.prisma || \
+    npx prisma generate --schema=packages/database/prisma/schema.prisma || \
+    true
+
 # Add the combined start script
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
