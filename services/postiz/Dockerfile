@@ -23,10 +23,16 @@ COPY --from=ghcr.io/gitroomhq/postiz-app:v2.11.3 /app /app
 WORKDIR /app
 
 # Re-generate Prisma client for Debian runtime (fixes Query Engine mismatch)
-# We try multiple common schema paths used in Postiz
-RUN npx prisma generate --schema=apps/backend/prisma/schema.prisma || \
-    npx prisma generate --schema=packages/database/prisma/schema.prisma || \
-    true
+# Dynamically find the schema, inject debian-openssl-3.0.x, and generate
+RUN PRISMA_SCHEMA=$(find /app -name schema.prisma | head -n 1) && \
+    if [ -n "$PRISMA_SCHEMA" ]; then \
+      echo "Found Prisma schema at $PRISMA_SCHEMA"; \
+      sed -i 's/binaryTargets = \[/binaryTargets = \["debian-openssl-3.0.x", /' "$PRISMA_SCHEMA" || true; \
+      npx prisma generate --schema="$PRISMA_SCHEMA"; \
+    else \
+      echo "Prisma schema not found! Searching for generated client to force engine download..."; \
+      npx prisma generate || true; \
+    fi
 
 # Add the combined start script
 COPY start.sh /start.sh
