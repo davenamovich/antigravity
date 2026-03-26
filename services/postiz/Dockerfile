@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     sudo \
     libgomp1 \
     musl \
+    findutils \
     && rm -rf /var/lib/apt/lists/*
 
 # Fix for ERR_DLOPEN_FAILED (musl-built binaries on glibc)
