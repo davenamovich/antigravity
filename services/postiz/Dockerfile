@@ -8,7 +8,11 @@ RUN apt-get update && apt-get install -y \
     openssl \
     sudo \
     libgomp1 \
+    musl \
     && rm -rf /var/lib/apt/lists/*
+
+# Fix for ERR_DLOPEN_FAILED (musl-built binaries on glibc)
+RUN ln -s /usr/lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1
 
 # Install Moltis using the provided command
 RUN curl -fsSL https://www.moltis.org/install.sh | sh
